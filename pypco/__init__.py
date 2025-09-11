@@ -16,7 +16,7 @@ pypco supports both OAUTH and Personal Access Token (PAT) authentication.
 """
 
 # PyPCO Version
-__version__ = "1.2.0"
+__version__ = "1.2.1"
 
 # Export the interface we present to clients
 

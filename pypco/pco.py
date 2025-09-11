@@ -469,7 +469,6 @@ class PCO:  # pylint: disable=too-many-instance-attributes
             with which they are associated. This makes it easier to process includes associated with
             specific objects since they are accessible directly from each returned object.
         """
-
         while True:  # pylint: disable=too-many-nested-blocks
 
             response = self.get(url, offset=offset, per_page=per_page, **params)
@@ -477,7 +476,10 @@ class PCO:  # pylint: disable=too-many-instance-attributes
             if response is None:
                 return
 
-            for cur in response['data']:
+            # Sometimes the returned data is a list of dicts and sometimes it's a dict
+            data_items = response['data'] if isinstance(response['data'], list) else [response['data']]
+            
+            for cur in data_items:
                 record = {
                     'data': cur,
                     'included': [],
@@ -512,7 +514,7 @@ class PCO:  # pylint: disable=too-many-instance-attributes
 
             offset += per_page
 
-            if 'next' not in response['links']:
+            if 'links' not in response or 'next' not in response['links']:
                 break
 
     def upload(self, file_path: str, **params) -> Optional[dict]:  # pylint: disable=unsubscriptable-object
